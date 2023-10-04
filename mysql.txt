@@ -1,0 +1,114 @@
+CREATE TABLE perdoruesit(
+perdoruesiid int(11)NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+emri varchar(50) NOT NULL,
+mbiemri varchar(50) NOT NULL,
+email varchar(50) NOT NULL,
+fjalekalimi varchar(255) NOT NULL,
+telefoni varchar(50) NOT NULL,
+nrpersonal varchar(50) UNIQUE,
+komuna varchar(100) NOT NULL,
+role varchar(20)
+)
+
+CREATE TABLE klientet (
+klientiid int(11)NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+emri varchar(50) NOT NULL,
+mbiemri varchar(50) NOT NULL,
+email varchar(50) NOT NULL,
+telefoni varchar(50) NOT NULL,
+nrpersonal varchar(50) UNIQUE,
+komuna varchar(100) NOT NULL
+)
+
+CREATE TABLE kategorit(
+kategoriaid int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+emri varchar(50) NOT NULL,
+pershkrimi text,
+kostoja decimal(5,2)
+)
+
+CREATE TABLE automjetet (
+automjetiid int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+kategoriaid int(11) NOT NULL,
+emri varchar(50) NOT NULL,
+nrregjistrimi varchar(50),
+pershkrimi text NOT NULL,
+FOREIGN KEY (kategoriaid) REFERENCES kategorit(kategoriaid)
+       ON DELETE CASCADE
+       ON UPDATE CASCADE
+)
+
+CREATE TABLE rezervimet (
+rezervimiid int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+automjetiid int(11) NOT NULL,
+perdoruesiid int(11) NOT NULL,
+klientiid int(11) NOT NULL,
+dataemarrjes date DEFAULT NULL,
+dataekthimit date DEFAULT NULL,
+komente text,
+FOREIGN KEY (automjetiid) REFERENCES automjetet(automjetiid)
+       ON DELETE CASCADE
+       ON UPDATE CASCADE,
+FOREIGN KEY (perdoruesiid) REFERENCES perdoruesit(perdoruesiid)
+       ON DELETE CASCADE
+       ON UPDATE CASCADE,
+FOREIGN KEY (klientiid) REFERENCES klientet(klientiid)
+       ON DELETE CASCADE
+       ON UPDATE CASCADE
+)
+
+INSERT INTO kategorit(emri, pershkrimi, kostoja) VALUES 
+('Kategoria I', 'Automobilat me kushte super te mira dhe ne gjendje te mira.', '50'), 
+('Kategoria II', 'Automobilat me kushte te mira dhe ne gjendje te mira.', '40'),
+('Kategoria III', 'Automobilat me kushte mbi mesatare dhe ne gjendje te mire.', '30'), 
+('Kategoria IV', 'Automobilat me kushte te mesatare dhe ne gjendje te mire.', '20')
+
+
+INSERT INTO automjetet(kategoriaid, emri, nrregjistrimi, pershkrimi) VALUES 
+(1, 'Range Rover', '01-290-DM', 'Automobili eshte i vitit 2020 dhe ka vetem 5 mij KM'), 
+(1, 'BMW X6', '01-292-OM', 'Automobili eshte i vitit 2020 dhe ka vetem 8 mij KM'),
+(1, 'Audi Q7', '01-390-DM', 'Automobili eshte i vitit 2020 dhe ka vetem 3 mij KM'), 
+(1, 'BMW X5', '01-299-OM', 'Automobili eshte i vitit 2021 dhe ka vetem 2 mij KM'),
+(2, 'WV Tigan', '01-890-DM', 'Automobili eshte i vitit 2019 dhe ka vetem 35 mij KM'), 
+(2, 'BMW X3', '01-222-OM', 'Automobili eshte i vitit 2018 dhe ka vetem 38 mij KM'),
+(2, 'Audi Q5', '01-790-DM', 'Automobili eshte i vitit 2018 dhe ka vetem 45 mij KM'), 
+(3, 'Golf 8', '01-594-OM', 'Automobili eshte i vitit 2019 dhe ka vetem 20 mij KM'),
+(3, 'Audi A4', '01-232-OM', 'Automobili eshte i vitit 2016 dhe ka vetem 38 mij KM'),
+(4, 'Mitcubishi ASC', '01-790-KM', 'Automobili eshte i vitit 2015 dhe ka vetem 70 mij KM'), 
+(4, 'Golf 6', '01-394-OM', 'Automobili eshte i vitit 2014 dhe ka vetem 80 mij KM')
+
+INSERT INTO perdoruesit (emri, mbiemri, email, fjalekalimi, telefoni, nrpersonal, komuna, role) VALUES 
+('Burim', 'Avdiu', 'burim.avdiu@probit-kos.com', '123456', '044333686', '123456789', 'Prishtine', '1'), 
+('Urim', 'Zymberi', 'urim.zymberi@probit-kos.com', '123456', '044898787', '123456879', 'Vushtri', '0');
+
+INSERT INTO klientet(emri, mbiemri, email, telefoni, nrpersonal,komuna) VALUES 
+('Hasan', 'Avdiu', 'hasan@gmail.com', '04898988', '115587968', 'Prishtine'), 
+('Besnik', 'Shatri', 'besniksh@hotmail.com', '048989888', '15181819987', 'Prishtine'),
+('Mirhan', 'Thaqi', 'mirhanth@gmail.com', '04598988', '225587968', 'Kamenice'), 
+('Besnik', 'Jashari', 'besnikj@hotmail.com', '043489888', '35181819987', 'Shtime'),
+('Alro', 'Lepaja', 'alor@gmail.com', '04478988', '925587968', 'Prishtine'), 
+('Hedip', 'Ajdini', 'hedipa@hotmail.com', '044189888', '55181819987', 'Prishtine'),
+('Kujtim', 'Gashi', 'kijtimi@gmail.com', '04918988', '675587968', 'Prizren'), 
+('Mihrije', 'Braha', 'mihrijeb@hotmail.com', '048189888', '85181819987', 'Peje');
+
+INSERT INTO rezervimet(automjetiid, perdoruesiid, klientiid, dataemarrjes, dataekthimit, komente) VALUES 
+(4, 1, 5, '2021-10-01', '2021-11-08', NULL), 
+(6, 2, 3, '2021-10-01', '2021-10-02', NULL),
+(5, 2, 2, '2021-10-01', '2021-11-08', NULL), 
+(1, 1, 1, '2021-10-01', '2021-10-02', NULL),
+(3, 2, 4, '2021-10-01', '2021-11-08', NULL), 
+(7, 1, 6, '2021-10-01', '2021-10-02', NULL),
+(2, 2, 7, '2021-10-01', '2021-11-08', NULL), 
+(8, 1, 8, '2021-10-01', '2021-10-02', NULL),
+(4, 1, 5, '2021-11-01', '2021-11-03', NULL), 
+(6, 2, 3, '2021-11-01', '2021-11-02', NULL),
+(7, 1, 7, '2021-11-01', '2021-11-03', NULL), 
+(1, 2, 3, '2021-10-20', '2021-10-02', "Eshte vonuar 3 dite"),
+(3, 2, 5, '2021-10-20', '2021-10-22', NULL), 
+(7, 1, 6, '2021-10-21', '2021-10-22', NULL),
+(2, 2, 7, '2021-10-21', '2021-10-024', NULL), 
+(8, 1, 8, '2021-11-01', '2021-11-02', NULL),
+(3, 2, 5, '2021-10-20', '2021-10-22', NULL), 
+(11, 1, 8, '2021-11-05', NULL, NULL),
+(10, 2, 7, '2021-11-06', NULL, NULL), 
+(9, 1, 1, '2021-11-05', NULL, NULL)
